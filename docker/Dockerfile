@@ -4,7 +4,7 @@ ENV CROSS_COMPILE=riscv64-linux-gnu-
 ENV ARCH=riscv
 
 RUN apt update \
-    && apt install -y qemu-system-misc gcc-riscv64-linux-gnu git make gcc flex bison bc bzip2 cpio
+    && apt install -y qemu-system-misc gcc-riscv64-linux-gnu git make gcc flex bison bc bzip2 cpio gdb-multiarch
 
 # download linux and compile it
 RUN git clone https://github.com/KINGFIOX/linux-5.4.286.git \
@@ -64,13 +64,13 @@ RUN mkdir /initramfs \
     sh' > init && chmod +x init \
     && find . -print0 | cpio --null -ov --format=newc | gzip -9 > initramfs.cpio.gz 
 
-COPY ./Makefile /Makefile
+RUN mkdir -p /workspace
 
-RUN apt install -y gdb-multiarch
+COPY ./.bashrc /root/.bashrc
 
-WORKDIR /
+WORKDIR /workspace
 
-CMD ["/bin/bash"]
+# CMD ["/bin/bash"]
 
 # CMD ["qemu-system-riscv64", "-nographic", "-machine", "virt", \
 #     "-kernel", "linux-5.4.286/arch/riscv/boot/Image", \

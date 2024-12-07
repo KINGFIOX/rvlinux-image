@@ -1,0 +1,10 @@
+services:
+  rvlinux:
+    image: rvlinux
+    container_name: rvlinux
+    volumes:
+      - /home/wangfiox/Downloads/linux/workspace:/workspace
+    command: bash
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
