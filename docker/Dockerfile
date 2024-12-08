@@ -1,4 +1,4 @@
-FROM toolchain
+FROM wangfiox/riscv-gnu-toolchain:latest
 
 ENV CROSS_COMPILE=riscv64-unknown-linux-gnu-
 ENV ARCH=riscv

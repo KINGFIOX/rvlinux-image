@@ -21,3 +21,6 @@ build: $(SRC)
 
 gdb:
 	riscv64-unknown-elf-gdb -x .gdbinit
+
+dump:
+	riscv64-unknown-linux-gnu-objdump -d /initramfs/bin/a.out > dump.txt

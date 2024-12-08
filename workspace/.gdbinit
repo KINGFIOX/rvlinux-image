@@ -2370,8 +2370,7 @@ set print array off
 set print array-indexes on
 set python print-stack full
 set architecture riscv:rv64
-# file /linux-5.4.286/vmlinux
-# file /linux-5.4.286/arch/riscv/boot/Image
+file ./vmlinux
 target remote localhost:1234
 
 
