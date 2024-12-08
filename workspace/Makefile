@@ -16,8 +16,8 @@ SRC := main.c
 
 build: $(SRC)
 	rm -f /initramfs/initramfs.cpio.gz
-	riscv64-linux-gnu-gcc -static $(SRC) -o /initramfs/bin/a.out
+	riscv64-unknown-linux-gnu-gcc -static $(SRC) -o /initramfs/bin/a.out
 	cd /initramfs && find . -print0 | cpio --null -ov --format=newc | gzip -9 > initramfs.cpio.gz 
 
 gdb:
-	gdb-multiarch -x .gdbinit
+	riscv64-unknown-elf-gdb -x .gdbinit

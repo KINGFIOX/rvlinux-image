@@ -9,6 +9,8 @@ int main(void) {
   uintptr_t a2 = (uintptr_t)sizeof(msg);
   uintptr_t a7 = (uintptr_t)__NR_write;
 
+  // __asm__ volatile("ebreak;");
+
   __asm__ volatile("add a0, %0, zero;"
                    "add a1, %1, zero;"
                    "add a2, %2, zero;"
