@@ -14,7 +14,7 @@ int main(void) {
   __asm__ volatile("add a0, %0, zero;"
                    "add a1, %1, zero;"
                    "add a2, %2, zero;"
-                   "add a7, %3, zero;"
+                   "add a7, %3, zero;" // write
                    "ecall"
                    :
                    : "r"(a0), "r"(a1), "r"(a2), "r"(a7)

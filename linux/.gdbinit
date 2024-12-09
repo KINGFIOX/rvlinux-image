@@ -2369,9 +2369,6 @@ set print pretty on
 set print array off
 set print array-indexes on
 set python print-stack full
-set architecture riscv:rv64
-file ./vmlinux
-target remote localhost:1234
 
 
 # Start ------------------------------------------------------------------------

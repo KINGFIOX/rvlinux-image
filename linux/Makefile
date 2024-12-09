@@ -20,7 +20,7 @@ build: $(SRC)
 	cd /initramfs && find . -print0 | cpio --null -ov --format=newc | gzip -9 > initramfs.cpio.gz 
 
 gdb:
-	riscv64-unknown-elf-gdb -x .gdbinit
+	riscv64-unknown-elf-gdb -ex "target remote localhost:1234" -ex "file ./linux/vmlinux"
 
 dump:
 	riscv64-unknown-linux-gnu-objdump -d /initramfs/bin/a.out > dump.txt

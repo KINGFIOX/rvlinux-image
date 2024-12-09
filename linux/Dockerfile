@@ -4,10 +4,10 @@ ENV CROSS_COMPILE=riscv64-unknown-linux-gnu-
 ENV ARCH=riscv
 
 RUN apt update -y \
-    && apt install -y build-essential git flex bison bc cpio wget qemu-system-riscv64
+    && apt install -y build-essential git flex bison bc cpio wget qemu-system-riscv64 bear
 
 # download linux and compile it
-RUN git clone https://github.com/KINGFIOX/linux-5.4.286.git \
+RUN git clone https://github.com/KINGFIOX/linux-5.4.286 \
     && cd /linux-5.4.286 \
     && make defconfig \
     && ./scripts/config --file $PWD/.config \
@@ -23,7 +23,7 @@ RUN git clone https://github.com/KINGFIOX/linux-5.4.286.git \
     -d CONFIG_DEBUG_INFO_BTF \
     -e CONFIG_GDB_SCRIPTS \
     -e DEBUG_INFO_DWARF4 \
-    && make -j$(nproc)
+    && bear -- make -j$(nproc)
 
 # build busybox
 RUN git clone https://git.busybox.net/busybox --depth=1 --branch=1_36_stable \
@@ -65,15 +65,10 @@ RUN mkdir /initramfs \
     sh' > init && chmod +x init \
     && find . -print0 | cpio --null -ov --format=newc | gzip -9 > initramfs.cpio.gz
 
-RUN mkdir -p /workspace
-
 COPY ./.bashrc /root/.bashrc
+COPY ./.gdbinit /root/.gdbinit
+COPY ./Makefile /root/Makefile
 
-WORKDIR /workspace
+RUN ln -s /linux-5.4.286 /root/linux
 
-# CMD ["/bin/bash"]
-
-# CMD ["qemu-system-riscv64", "-nographic", "-machine", "virt", \
-#     "-kernel", "linux-5.4.286/arch/riscv/boot/Image", \
-#     "-initrd", "initramfs/initramfs.cpio.gz", \
-#     "-append", "console=ttyS0"]
+WORKDIR /root/linux
