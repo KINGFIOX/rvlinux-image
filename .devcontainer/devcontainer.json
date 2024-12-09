@@ -19,8 +19,8 @@
 			]
 		}
 	},
-	"workspaceFolder": "/root",
-	"postCreateCommand": "apt install -y clangd"
+	"workspaceFolder": "/root"
+	// "postCreateCommand": "apt install -y clangd"
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
 }

@@ -7,8 +7,9 @@ RUN apt update -y \
     && apt install -y build-essential git flex bison bc cpio wget qemu-system-riscv64 bear
 
 # download linux and compile it
-RUN git clone https://github.com/KINGFIOX/linux-5.4.286 \
-    && cd /linux-5.4.286 \
+RUN cd /root \
+    && git clone https://github.com/KINGFIOX/linux-5.4.286 linux \
+    && cd /root/linux \
     && make defconfig \
     && ./scripts/config --file $PWD/.config \
     -d CONFIG_COMPILE_TEST \
@@ -62,13 +63,13 @@ RUN mkdir /initramfs \
     setsid cttyhack sh \n\
     echo /sbin/mdev > /proc/sys/kernel/hotplug \n\
     mdev -s \n\
-    sh' > init && chmod +x init \
-    && find . -print0 | cpio --null -ov --format=newc | gzip -9 > initramfs.cpio.gz
+    sh' > init && chmod +x init
 
 COPY ./.bashrc /root/.bashrc
 COPY ./.gdbinit /root/.gdbinit
 COPY ./Makefile /root/Makefile
 
-RUN ln -s /linux-5.4.286 /root/linux
+WORKDIR /root/
 
-WORKDIR /root/linux
+# install clangd
+RUN apt install -y clangd
