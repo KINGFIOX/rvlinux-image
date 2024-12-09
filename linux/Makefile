@@ -1,4 +1,4 @@
-BINARY = /root/linux/arch/riscv/boot/Image
+BINARY = /oslab/linux/arch/riscv/boot/Image
 INITRAMFS = /initramfs/initramfs.cpio.gz
 
 qemu:

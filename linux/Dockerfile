@@ -7,9 +7,9 @@ RUN apt update -y \
     && apt install -y build-essential git flex bison bc cpio wget qemu-system-riscv64 bear
 
 # download linux and compile it
-RUN cd /root \
+RUN mkdir -p /oslab && cd /oslab \
     && git clone https://github.com/KINGFIOX/linux-5.4.286 linux \
-    && cd /root/linux \
+    && cd /oslab/linux \
     && make defconfig \
     && ./scripts/config --file $PWD/.config \
     -d CONFIG_COMPILE_TEST \
@@ -65,11 +65,13 @@ RUN mkdir /initramfs \
     mdev -s \n\
     sh' > init && chmod +x init
 
+# some config
 COPY ./.bashrc /root/.bashrc
 COPY ./.gdbinit /root/.gdbinit
-COPY ./Makefile /root/Makefile
 
-WORKDIR /root/
+# directory environment
+COPY ./Makefile /oslab/Makefile
+WORKDIR /oslab
 
 # install clangd
 RUN apt install -y clangd
