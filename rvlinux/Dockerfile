@@ -1,10 +1,10 @@
-FROM wangfiox/riscv-gnu-toolchain:latest
+FROM toolchain:latest
 
 ENV CROSS_COMPILE=riscv64-unknown-linux-gnu-
 ENV ARCH=riscv
 
-RUN apt update -y \
-    && apt install -y build-essential git flex bison bc cpio wget qemu-system-riscv64 bear
+RUN dnf update -y \
+    && dnf install -y git flex bison bc cpio wget qemu-system-riscv64 bear
 
 # download linux and compile it
 RUN mkdir -p /oslab && cd /oslab \

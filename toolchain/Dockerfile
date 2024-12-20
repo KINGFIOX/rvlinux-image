@@ -1,8 +1,9 @@
-FROM ubuntu:22.04
+FROM fedora:latest
 
 # toolchain
-RUN apt update -y \
-    && apt install -y autoconf automake autotools-dev curl python3 python3-pip libmpc-dev libmpfr-dev libgmp-dev gawk build-essential bison flex texinfo gperf libtool patchutils bc zlib1g-dev libexpat-dev ninja-build git cmake libglib2.0-dev libslirp-dev
+RUN dnf update -y \
+    && dnf install -y git diffutils which \
+    autoconf automake python3 libmpc-devel mpfr-devel gmp-devel gawk bison flex texinfo patchutils gcc gcc-c++ zlib-devel expat-devel libslirp-devel
 
 RUN git clone https://github.com/riscv/riscv-gnu-toolchain \
     && cd /riscv-gnu-toolchain \ 

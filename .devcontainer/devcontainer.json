@@ -3,7 +3,7 @@
 {
 	"name": "learn linux kernel",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "rvlinux",
+	"image": "wangfiox/rvlinux",
 	// "build": {
 	// 	"dockerfile": "../linux/Dockerfile"
 	// },
