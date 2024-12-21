@@ -4,7 +4,7 @@ ENV CROSS_COMPILE=riscv64-unknown-linux-gnu-
 ENV ARCH=riscv
 
 RUN dnf update -y \
-    && dnf install -y git flex bison bc cpio wget qemu-system-riscv64 bear
+    && dnf install -y git flex bison bc cpio wget qemu-system-riscv64 hostname
 
 # download linux and compile it
 RUN mkdir -p /oslab && cd /oslab \
@@ -24,7 +24,8 @@ RUN mkdir -p /oslab && cd /oslab \
     -d CONFIG_DEBUG_INFO_BTF \
     -e CONFIG_GDB_SCRIPTS \
     -e DEBUG_INFO_DWARF4 \
-    && bear -- make -j$(nproc)
+    && make -j$(nproc) \
+    && python3 ./scripts/gen_compile_commands.py
 
 # build busybox
 RUN git clone https://git.busybox.net/busybox --depth=1 --branch=1_36_stable \
@@ -33,8 +34,10 @@ RUN git clone https://git.busybox.net/busybox --depth=1 --branch=1_36_stable \
     && echo "CONFIG_STATIC=y" >> .config \
     && make -j$(nproc)
 
+COPY ./init /initramfs/init
+
 # build initramfs
-RUN mkdir /initramfs \
+RUN mkdir -p /initramfs \
     && cd /initramfs \
     && mkdir -p bin \
     && mkdir -p sbin \
@@ -54,16 +57,8 @@ RUN mkdir /initramfs \
     && mknod console c 5 1 \
     && cd .. \
     && cp ../busybox/busybox ./bin/ \
-    && echo '#!/bin/busybox sh \n\
-    /bin/busybox --install -s \n\
-    mount -t devtmpfs devtmpfs /dev \n\
-    mount -t proc proc /proc \n\
-    mount -t sysfs sysfs /sys \n\
-    mount -t tmpfs tmpfs /tmp \n\
-    setsid cttyhack sh \n\
-    echo /sbin/mdev > /proc/sys/kernel/hotplug \n\
-    mdev -s \n\
-    sh' > init && chmod +x init
+    && chmod +x ./init \
+    && cd /initramfs && find . -print0 | cpio --null -ov --format=newc | gzip -9 > initramfs.cpio.gz 
 
 # some config
 COPY ./.bashrc /root/.bashrc
@@ -74,4 +69,4 @@ COPY ./Makefile /oslab/Makefile
 WORKDIR /oslab
 
 # install clangd
-RUN apt install -y clangd
+RUN dnf install -y clangd
