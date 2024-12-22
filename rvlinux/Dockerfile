@@ -70,3 +70,6 @@ WORKDIR /oslab
 
 # install clangd
 RUN dnf install -y clangd
+
+# install lazygit
+RUN dnf copr enable atim/lazygit -y && dnf install -y lazygit
